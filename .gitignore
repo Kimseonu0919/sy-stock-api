@@ -1,0 +1,32 @@
+# --- Python 기본 ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- 배포 및 패키징 (PyPI) ---
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# --- 가상환경 ---
+# (사용자가 어떤 이름을 쓸지 모르니 통상적인 것 모두 포함)
+.venv/
+venv/
+env/
+ENV/
+
+# --- IDE 설정 (개인 설정 제외) ---
+.idea/
+.vscode/
+*.swp
+
+# --- 테스팅 및 커버리지 ---
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# --- [중요] 보안 및 설정 ---
+.env
+.DS_Store
