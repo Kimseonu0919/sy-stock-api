@@ -22,17 +22,27 @@ class KisAuthMixin:
     _token_limiter = RateLimiter(max_calls=1, period=1.0)
 
     def __init__(
-        self,
-        app_key: str,
-        app_secret: str,
-        acc_no: str,
-        is_real: bool = False,
-        token_store: TokenStore = None,
+        self, 
+        app_key: str, 
+        app_secret: str, 
+        acc_no: str, 
+        is_real: bool = False, 
+        token_store: TokenStore = None
     ):
         self.app_key = app_key
         self.app_secret = app_secret
-        self.acc_no_prefix = acc_no[:8]
-        self.acc_no_suffix = acc_no[-2:]
+        
+        # [수정] 사용자가 "12345678-01"로 넣든 "1234567801"로 넣든 
+        # 하이픈(-)과 공백을 모두 제거하여 숫자 10자리만 남김
+        clean_acc = acc_no.replace("-", "").strip()
+        
+        if len(clean_acc) != 10:
+             # 혹시라도 자릿수가 안 맞으면 경고 (로그나 print로 확인 추천)
+             print(f"⚠️ [경고] 계좌번호 포맷이 이상합니다 ({len(clean_acc)}자리). KIS는 보통 10자리(8+2)입니다.")
+
+        self.acc_no_prefix = clean_acc[:8]  # 앞 8자리 (종합계좌번호)
+        self.acc_no_suffix = clean_acc[8:]  # 뒤 2자리 (계좌상품코드)
+        
         self.is_real = is_real
         self.base_url = self.URL_REAL if is_real else self.URL_VIRTUAL
 
