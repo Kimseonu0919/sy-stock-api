@@ -11,7 +11,7 @@ class Broker(ABC):
         pass
 
     @abstractmethod
-    def fetch_price(self, symbol: str) -> Quote:
+    def price(self, symbol: str) -> Quote:
         pass
 
     @abstractmethod
@@ -20,7 +20,7 @@ class Broker(ABC):
         pass
 
     @abstractmethod
-    def fetch_balance(self) -> Balance:
+    def balance(self) -> Balance:
         """계좌 잔고 및 보유 종목 조회"""
         pass
 

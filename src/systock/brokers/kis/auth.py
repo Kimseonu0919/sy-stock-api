@@ -1,9 +1,11 @@
-# src/systock/brokers/kis/auth.py
 import requests
 import json
 import logging
 from typing import Optional, Dict
 
+# [수정] utils에서 RateLimiter 가져오기
+from ...utils import RateLimiter
+from ...exceptions import AuthError
 
 class KisAuthMixin:
     """인증 및 기본 HTTP 통신 관리"""
@@ -11,6 +13,10 @@ class KisAuthMixin:
     # URL 상수
     URL_REAL = "https://openapi.koreainvestment.com:9443"
     URL_VIRTUAL = "https://openapivts.koreainvestment.com:29443"
+
+    # [핵심] 토큰 발급용 전역 제한기 (모든 인스턴스 공유)
+    # 1초에 1회 발급 제한 (데코레이터 대신 static 변수로 관리)
+    _token_limiter = RateLimiter(max_calls=1, period=1.0)
 
     def __init__(
         self, app_key: str, app_secret: str, acc_no: str, is_real: bool = False
@@ -25,11 +31,16 @@ class KisAuthMixin:
         self.access_token: Optional[str] = None
         self._session = requests.Session()
 
-        # 로거는 client.py의 최종 클래스 이름으로 설정되지만 여기서 미리 초기화
+        # 로거 초기화
         self.logger = logging.getLogger("systock.kis")
 
+    # [변경] 데코레이터(@RateLimiter) 제거
     def connect(self) -> bool:
         """토큰 발급"""
+        
+        # [추가] 제한기 대기 (다른 객체가 발급 중이면 기다림)
+        KisAuthMixin._token_limiter.wait()
+
         self.logger.debug("토큰 발급 시도...")
         url = f"{self.base_url}/oauth2/tokenP"
         body = {
@@ -45,7 +56,7 @@ class KisAuthMixin:
             self.logger.info("KIS API 연결 성공 (Token 발급됨)")
             return True
         else:
-            raise RuntimeError(f"연결 실패: {resp.text}")
+            raise AuthError(f"인증(토큰발급) 실패: {resp.text}")
 
     def _get_headers(self, tr_id: str, data: dict = None) -> Dict[str, str]:
         """헤더 생성 (Hash Key 포함)"""

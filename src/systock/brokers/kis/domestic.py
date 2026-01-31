@@ -1,14 +1,14 @@
 # src/systock/brokers/kis/domestic.py
-import requests
 import json
 from ...models import Quote, Order, Balance, Holding
 from ...constants import Side
+from ...exceptions import ApiError
 
 
 class KisDomesticMixin:
     """국내 주식 매매/조회 기능"""
 
-    def fetch_price(self, symbol: str) -> Quote:
+    def price(self, symbol: str) -> Quote:
         """현재가 조회 (주식현재가 시세)"""
         if not self.access_token:
             self.connect()
@@ -18,12 +18,12 @@ class KisDomesticMixin:
 
         params = {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": symbol}
 
-        resp = requests.get(url, headers=headers, params=params)
+        resp = self.request("GET", url, headers=headers, params=params)
         resp.raise_for_status()
         data = resp.json()
 
         if data["rt_cd"] != "0":
-            raise RuntimeError(f"시세 조회 실패: {data['msg1']}")
+            raise ApiError(message=data['msg1'], code=data.get('msg_cd'))
 
         output = data["output"]
         return Quote(
@@ -62,13 +62,13 @@ class KisDomesticMixin:
 
         headers = self._get_headers(tr_id=tr_id, data=order_data)
 
-        resp = requests.post(url, headers=headers, data=json.dumps(order_data))
+        resp = self.request("POST", url, headers=headers, data=json.dumps(order_data))
         resp.raise_for_status()
         data = resp.json()
 
         if data["rt_cd"] != "0":
             self.logger.error(f"주문 실패: {data['msg1']}")
-            raise RuntimeError(f"주문 실패: {data['msg1']}")
+            raise ApiError(message=data['msg1'], code=data.get('msg_cd'))
 
         # 결과 매핑
         ord_no = data["output"]["ODNO"]
@@ -83,7 +83,7 @@ class KisDomesticMixin:
             executed=False,  # 초기 주문은 미체결 상태
         )
 
-    def fetch_balance(self) -> Balance:
+    def balance(self) -> Balance:
         """잔고 조회 (주식잔고조회)"""
         self.logger.debug("잔고 조회 요청...")
         if not self.access_token:
@@ -110,12 +110,12 @@ class KisDomesticMixin:
             "CTX_AREA_NK100": "",
         }
 
-        resp = requests.get(url, headers=headers, params=params)
+        resp = self.request("GET", url, headers=headers, params=params)
         resp.raise_for_status()
         data = resp.json()
 
         if data["rt_cd"] != "0":
-            raise RuntimeError(f"잔고 조회 실패: {data['msg1']}")
+            raise ApiError(f"잔고 조회 실패: {data['msg1']}")
 
         # 1. 보유 종목 파싱
         holdings = []
