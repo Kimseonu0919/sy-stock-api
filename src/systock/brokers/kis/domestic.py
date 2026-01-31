@@ -23,7 +23,7 @@ class KisDomesticMixin:
         data = resp.json()
 
         if data["rt_cd"] != "0":
-            raise ApiError(message=data['msg1'], code=data.get('msg_cd'))
+            raise ApiError(message=data["msg1"], code=data.get("msg_cd"))
 
         output = data["output"]
         return Quote(
@@ -68,7 +68,7 @@ class KisDomesticMixin:
 
         if data["rt_cd"] != "0":
             self.logger.error(f"주문 실패: {data['msg1']}")
-            raise ApiError(message=data['msg1'], code=data.get('msg_cd'))
+            raise ApiError(message=data["msg1"], code=data.get("msg_cd"))
 
         # 결과 매핑
         ord_no = data["output"]["ODNO"]

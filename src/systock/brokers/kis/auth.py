@@ -7,6 +7,7 @@ from typing import Optional, Dict
 from ...utils import RateLimiter
 from ...exceptions import AuthError
 
+
 class KisAuthMixin:
     """인증 및 기본 HTTP 통신 관리"""
 
@@ -37,7 +38,7 @@ class KisAuthMixin:
     # [변경] 데코레이터(@RateLimiter) 제거
     def connect(self) -> bool:
         """토큰 발급"""
-        
+
         # [추가] 제한기 대기 (다른 객체가 발급 중이면 기다림)
         KisAuthMixin._token_limiter.wait()
 

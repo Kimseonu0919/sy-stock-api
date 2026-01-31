@@ -16,12 +16,13 @@ from systock.models import Quote, Order
 
 # [추가] 우리가 만든 커스텀 예외 클래스 임포트
 from systock.exceptions import (
-    SyStockError, 
-    ConfigError, 
-    NetworkError, 
-    ApiError, 
-    AuthError
+    SyStockError,
+    ConfigError,
+    NetworkError,
+    ApiError,
+    AuthError,
 )
+
 
 def main() -> None:
     """메인 실행 함수"""
@@ -31,7 +32,7 @@ def main() -> None:
     try:
         # .env 파일에서 환경변수를 자동으로 로드합니다.
         broker = create_broker(broker_name="kis", mode="virtual")
-        
+
     except ConfigError as e:
         print(f"❌ [설정 오류] 필수 환경변수(APP_KEY 등)가 누락되었습니다: {e}")
         return
@@ -43,7 +44,7 @@ def main() -> None:
     try:
         if broker.connect():
             print("✅ [성공] API 연결 완료 (Access Token 발급됨)")
-            
+
     except AuthError as e:
         print(f"⛔ [인증 실패] 토큰 발급에 실패했습니다. API Key를 확인하세요: {e}")
         return
@@ -61,7 +62,7 @@ def main() -> None:
         print(f" - 현재가: {quote.price:,}원")
         print(f" - 거래량: {quote.volume:,}주")
         print(f" - 등락률: {quote.change}%")
-        
+
     except ApiError as e:
         print(f"⚠️ [시세 조회 거부] 증권사 에러 (코드: {e.code}): {e}")
     except NetworkError as e:
@@ -74,14 +75,10 @@ def main() -> None:
     print(f"\n>>> [{symbol}] 매수 주문 시도 ({price:,}원 / {qty}주)...")
 
     try:
-        order: Order = broker.order(
-            symbol=symbol, side=Side.BUY, price=price, qty=qty
-        )
+        order: Order = broker.order(symbol=symbol, side=Side.BUY, price=price, qty=qty)
         print(f"✅ 주문 접수 완료! 주문번호: {order.order_id}")
-        print(
-            f"   내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원"
-        )
-        
+        print(f"   내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원")
+
     except ApiError as e:
         # 주문 거부 (장 종료, 잔고 부족 등)는 여기서 잡힙니다.
         print(f"🚫 [주문 거부] {e}")
@@ -105,6 +102,7 @@ def main() -> None:
         print(f"⚠️ [잔고 조회 실패] {e}")
     except Exception as e:
         print(f"❌ [기타 오류] {e}")
+
 
 if __name__ == "__main__":
     main()
