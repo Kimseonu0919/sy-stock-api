@@ -13,6 +13,7 @@ from .realtime import KisRealtimeMixin
 
 import requests
 from ...exceptions import ConfigError, NetworkError  # [추가]
+from ...token_store import TokenStore
 
 
 class KisBroker(
@@ -34,13 +35,13 @@ class KisBroker(
     _limiters_lock = threading.Lock()  # 동시 접근 제어용 락
 
     def __init__(
-        self, app_key: str, app_secret: str, acc_no: str, is_real: bool = False
+        self, app_key: str, app_secret: str, acc_no: str, is_real: bool = False, token_store: TokenStore = None
     ):
         if not app_key or not app_secret or not acc_no:
             raise ConfigError("API Key 또는 계좌번호가 설정되지 않았습니다.")
 
         # 1. 부모 클래스(KisAuthMixin) 초기화 -> self.session, self.logger 등 생성
-        super().__init__(app_key, app_secret, acc_no, is_real)
+        super().__init__(app_key, app_secret, acc_no, is_real, token_store)
 
         # 2. 유량 제한 설정 (계좌 단위 공유 로직)
         # 실전: 초당 20건 / 모의: 초당 2건

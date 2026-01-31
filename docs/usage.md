@@ -2,6 +2,9 @@
 
 이 문서는 `sy-stock-api`의 상세 기능과 다양한 매매 시나리오를 설명합니다.
 
+더 전문적인 사용법을 위한 가이드는 아래를 참고하세요.
+* [전문적 사용 가이드 (Professional Usage Guide)](docs/professional_usage.md)
+
 ## 1. 초기 설정 (Setup)
 
 ### 브로커 생성
@@ -116,5 +119,4 @@ except ConfigError:
     print("설정값이 올바르지 않습니다.")
 
 ```
-
 ---

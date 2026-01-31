@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+logs/
 
 # --- 배포 및 패키징 (PyPI) ---
 dist/
@@ -30,4 +31,4 @@ htmlcov/
 
 # --- [중요] 보안 및 설정 ---
 .env
-.DS_Store
+kis_token.json

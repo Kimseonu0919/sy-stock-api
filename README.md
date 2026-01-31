@@ -12,10 +12,12 @@
 
 ## 🚀 Key Features
 
-* **Unified Interface**: 모든 증권사(현재 KIS 지원)를 동일한 메서드(`fetch_price`, `create_order`)로 제어합니다.
+* **Unified Interface**: 모든 증권사(현재 KIS 지원)를 동일한 메서드(`price`, `order`, `balance`)로 제어하여 일관된 개발 경험을 제공합니다.
+* **Smart Rate Limiting**: 증권사의 초당 API 호출 제한(Rate Limit)을 자동으로 준수하며, 멀티 스레드 환경에서도 안전하게 동작(Thread-Safe)합니다.
 * **Type Safety**: Dictionary가 아닌 `dataclass` 기반의 DTO(`Quote`, `Order`)를 반환하여 IDE 자동완성과 타입 안정성을 보장합니다.
+* **Flexible Token Caching**: 파일(JSON), OS Keyring, Redis 등 다양한 방식으로 인증 토큰을 캐싱하여 재연결 속도를 최적화합니다.
 * **Factory Pattern**: 문자열 파라미터 하나로 브로커 인스턴스를 교체할 수 있어, 유연한 확장성을 제공합니다.
-* **Production Ready**: 재시도 로직, 명확한 에러 핸들링, 환경 변수(`.env`) 기반의 보안 관리가 적용되어 있습니다.
+* **Production Ready**: 명확한 에러 핸들링(Exception Hierarchy)과 환경 변수(`.env`) 기반의 보안 관리가 적용되어 있습니다.
 
 ---
 
@@ -113,8 +115,9 @@ print(f"주문 접수 완료: {order.order_id}")
 * **Feature**: 한국투자증권(KIS) REST API 구현체 추가
 * OAuth 접근 토큰 자동 발급 및 관리
 * Hash Key 생성 로직 구현
-* 주식 현재가 시세 조회(`fetch_price`)
-* 지정가 매수/매도 주문(`create_order`)
+* 주식 현재가 시세 조회(`price`)
+* 지정가 매수/매도 주문(`order`)
+* etc ....
 
 
 * **Infra**: `pyproject.toml` 기반 패키징 설정 및 `.env` 환경 변수 로드 지원
