@@ -1,0 +1,39 @@
+site_name: sy-stock-api Docs
+site_url: https://Kimseonu0919.github.io/sy-stock-api/
+repo_url: https://github.com/Kimseonu0919/sy-stock-api
+repo_name: sy-stock-api
+
+theme:
+  name: material
+  language: ko
+  palette: 
+    # 라이트 모드 (기본)
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    # 다크 모드 (토글 가능)
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  features:
+    - navigation.tabs        # 상단 탭 메뉴 스타일
+    - navigation.top         # '맨 위로' 버튼
+    - search.suggest         # 검색어 자동 완성
+    - content.code.copy      # 코드 복사 버튼
+
+markdown_extensions:
+  - admonition               # 경고/참고 박스
+  - pymdownx.highlight:      # 코드 하이라이팅
+      anchor_linenums: true
+  - pymdownx.superfences     # 코드 블록 확장
+
+nav:
+  - Home: index.md
+  - User Guide: usage.md
+  - API Reference: api.md    # (나중에 채울 예정)
