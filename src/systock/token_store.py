@@ -18,8 +18,10 @@ try:
 except ImportError:
     redis = None
 
+
 class TokenStore(ABC):
     """토큰 저장소 추상 클래스"""
+
     @abstractmethod
     def save(self, token: str, expired_at: str, acc_no: str):
         pass
@@ -31,6 +33,7 @@ class TokenStore(ABC):
         """
         pass
 
+
 # -----------------------------------------------------------
 # 1. 파일(JSON) 저장소 (기본값)
 # -----------------------------------------------------------
@@ -40,12 +43,12 @@ class FileTokenStore(TokenStore):
         self.logger = logging.getLogger("systock.store.file")
 
     def save(self, token: str, expired_at: str, acc_no: str):
-        # 여러 계좌를 파일 하나에 저장하기 위해 구조 변경 가능하지만, 
+        # 여러 계좌를 파일 하나에 저장하기 위해 구조 변경 가능하지만,
         # 여기선 간단히 파일 하나에 한 계좌(혹은 덮어쓰기)로 구현
         data = {
             "access_token": token,
             "expired_at": expired_at,
-            "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         try:
             with open(self.file_path, "w", encoding="utf-8") as f:
@@ -59,15 +62,16 @@ class FileTokenStore(TokenStore):
         try:
             with open(self.file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            
+
             token = data.get("access_token")
             expired_str = data.get("expired_at")
             if not token or not expired_str:
                 return None
-                
+
             return token, datetime.strptime(expired_str, "%Y-%m-%d %H:%M:%S")
         except Exception:
             return None
+
 
 # -----------------------------------------------------------
 # 2. OS Keyring 저장소 (보안 강화)
@@ -89,15 +93,18 @@ class KeyringTokenStore(TokenStore):
             return None
         try:
             data = json.loads(data_str)
-            return data["token"], datetime.strptime(data["expired_at"], "%Y-%m-%d %H:%M:%S")
+            return data["token"], datetime.strptime(
+                data["expired_at"], "%Y-%m-%d %H:%M:%S"
+            )
         except:
             return None
+
 
 # -----------------------------------------------------------
 # 3. Redis 저장소 (프로/서버용)
 # -----------------------------------------------------------
 class RedisTokenStore(TokenStore):
-    def __init__(self, host='localhost', port=6379, db=0, password=None):
+    def __init__(self, host="localhost", port=6379, db=0, password=None):
         if redis is None:
             raise ImportError("redis 라이브러리가 필요합니다. (pip install redis)")
         self.r = redis.Redis(host=host, port=port, db=db, password=password)
@@ -107,10 +114,10 @@ class RedisTokenStore(TokenStore):
         # 만료 시간까지 남은 초 계산 (TTL 설정용)
         exp_dt = datetime.strptime(expired_at, "%Y-%m-%d %H:%M:%S")
         ttl = int((exp_dt - datetime.now()).total_seconds())
-        
+
         if ttl > 0:
             data = json.dumps({"token": token, "expired_at": expired_at})
-            self.r.setex(key, ttl, data) # 자동 폭파 설정
+            self.r.setex(key, ttl, data)  # 자동 폭파 설정
 
     def load(self, acc_no: str) -> Optional[Tuple[str, datetime]]:
         key = f"systock:token:{acc_no}"
@@ -119,6 +126,8 @@ class RedisTokenStore(TokenStore):
             return None
         try:
             data = json.loads(data_bytes)
-            return data["token"], datetime.strptime(data["expired_at"], "%Y-%m-%d %H:%M:%S")
+            return data["token"], datetime.strptime(
+                data["expired_at"], "%Y-%m-%d %H:%M:%S"
+            )
         except:
             return None

@@ -35,7 +35,12 @@ class KisBroker(
     _limiters_lock = threading.Lock()  # 동시 접근 제어용 락
 
     def __init__(
-        self, app_key: str, app_secret: str, acc_no: str, is_real: bool = False, token_store: TokenStore = None
+        self,
+        app_key: str,
+        app_secret: str,
+        acc_no: str,
+        is_real: bool = False,
+        token_store: TokenStore = None,
     ):
         if not app_key or not app_secret or not acc_no:
             raise ConfigError("API Key 또는 계좌번호가 설정되지 않았습니다.")

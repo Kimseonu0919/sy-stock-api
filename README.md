@@ -33,7 +33,7 @@ pip install sy-stock-api
 개발 버전 설치:
 
 ```bash
-git clone [https://github.com/your-username/sy-stock-api.git](https://github.com/your-username/sy-stock-api.git)
+git clone https://github.com/Kimseonu0919/sy-stock-api
 cd sy-stock-api
 pip install -e .
 
