@@ -768,10 +768,12 @@
 <hr />
 <h2 id="key-features">🚀 Key Features</h2>
 <ul>
-<li><strong>Unified Interface</strong>: 모든 증권사(현재 KIS 지원)를 동일한 메서드(<code>fetch_price</code>, <code>create_order</code>)로 제어합니다.</li>
+<li><strong>Unified Interface</strong>: 모든 증권사(현재 KIS 지원)를 동일한 메서드(<code>price</code>, <code>order</code>, <code>balance</code>)로 제어하여 일관된 개발 경험을 제공합니다.</li>
+<li><strong>Smart Rate Limiting</strong>: 증권사의 초당 API 호출 제한(Rate Limit)을 자동으로 준수하며, 멀티 스레드 환경에서도 안전하게 동작(Thread-Safe)합니다.</li>
 <li><strong>Type Safety</strong>: Dictionary가 아닌 <code>dataclass</code> 기반의 DTO(<code>Quote</code>, <code>Order</code>)를 반환하여 IDE 자동완성과 타입 안정성을 보장합니다.</li>
+<li><strong>Flexible Token Caching</strong>: 파일(JSON), OS Keyring, Redis 등 다양한 방식으로 인증 토큰을 캐싱하여 재연결 속도를 최적화합니다.</li>
 <li><strong>Factory Pattern</strong>: 문자열 파라미터 하나로 브로커 인스턴스를 교체할 수 있어, 유연한 확장성을 제공합니다.</li>
-<li><strong>Production Ready</strong>: 재시도 로직, 명확한 에러 핸들링, 환경 변수(<code>.env</code>) 기반의 보안 관리가 적용되어 있습니다.</li>
+<li><strong>Production Ready</strong>: 명확한 에러 핸들링(Exception Hierarchy)과 환경 변수(<code>.env</code>) 기반의 보안 관리가 적용되어 있습니다.</li>
 </ul>
 <hr />
 <h2 id="installation">📦 Installation</h2>
@@ -779,7 +781,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>sy-stock-api
 </code></pre></div>
 <p>개발 버전 설치:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span><span class="o">[</span>https://github.com/your-username/sy-stock-api.git<span class="o">](</span>https://github.com/your-username/sy-stock-api.git<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Kimseonu0919/sy-stock-api
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>sy-stock-api
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
@@ -808,11 +810,11 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">broker</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># 3. 현재가 조회 (삼성전자)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">quote</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">fetch_price</span><span class="p">(</span><span class="s2">&quot;005930&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">quote</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="s2">&quot;005930&quot;</span><span class="p">)</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;현재가: </span><span class="si">{</span><span class="n">quote</span><span class="o">.</span><span class="n">price</span><span class="si">}</span><span class="s2">원 / 등락률: </span><span class="si">{</span><span class="n">quote</span><span class="o">.</span><span class="n">change</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># 4. 매수 주문</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">create_order</span><span class="p">(</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;005930&quot;</span><span class="p">,</span>
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">price</span><span class="o">=</span><span class="mi">60000</span><span class="p">,</span>
@@ -843,9 +845,10 @@
 <li><strong>Feature</strong>: 한국투자증권(KIS) REST API 구현체 추가</li>
 <li>OAuth 접근 토큰 자동 발급 및 관리</li>
 <li>Hash Key 생성 로직 구현</li>
-<li>주식 현재가 시세 조회(<code>fetch_price</code>)</li>
+<li>주식 현재가 시세 조회(<code>price</code>)</li>
+<li>지정가 매수/매도 주문(<code>order</code>)</li>
 <li>
-<p>지정가 매수/매도 주문(<code>create_order</code>)</p>
+<p>etc ....</p>
 </li>
 <li>
 <p><strong>Infra</strong>: <code>pyproject.toml</code> 기반 패키징 설정 및 <code>.env</code> 환경 변수 로드 지원</p>

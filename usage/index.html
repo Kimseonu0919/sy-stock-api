@@ -430,7 +430,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        환경 변수 로드
+        브로커 생성
       
     </span>
   </a>
@@ -446,12 +446,51 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 매매 시나리오
+        2. 시세 및 잔고 조회
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. 매매 시나리오">
+    <nav class="md-nav" aria-label="2. 시세 및 잔고 조회">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-price" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        현재가 조회 (Current Price)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        잔고 조회 (Balance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 매매 시나리오
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 매매 시나리오">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -466,10 +505,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#market-sell" class="md-nav__link">
+  <a href="#limit-sell" class="md-nav__link">
     <span class="md-ellipsis">
       
-        시장가 매도 (Market Sell)
+        지정가 매도 (Limit Sell)
       
     </span>
   </a>
@@ -482,10 +521,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-error-handling" class="md-nav__link">
+  <a href="#4-error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 에러 처리 (Error Handling)
+        4. 에러 처리 (Error Handling)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-systockexceptions-import-apierror-networkerror-configerror-try-brokerpriceinvalid_code-except-apierror-as-e-printfapi-e-ecode-msg_cd-except-networkerror-print-except-configerror-api-key-print" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        from systock.exceptions import ApiError, NetworkError, ConfigError try: # 존재하지 않는 종목 코드로 조회 시도 broker.price(&quot;INVALID_CODE&quot;) except ApiError as e: # 증권사 서버에서 에러를 반환한 경우 (예: 종목코드 없음, 장 종료 등) print(f&quot;API 오류 발생: {e}&quot;) # e.code로 에러 코드(msg_cd) 접근 가능 except NetworkError: # 인터넷 연결이 끊겼거나 타임아웃 발생 시 print(&quot;인터넷 연결을 확인해주세요.&quot;) except ConfigError: # API Key 누락 등 설정 오류 print(&quot;설정값이 올바르지 않습니다.&quot;)
       
     </span>
   </a>
@@ -569,7 +619,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        환경 변수 로드
+        브로커 생성
       
     </span>
   </a>
@@ -585,12 +635,51 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 매매 시나리오
+        2. 시세 및 잔고 조회
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. 매매 시나리오">
+    <nav class="md-nav" aria-label="2. 시세 및 잔고 조회">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-price" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        현재가 조회 (Current Price)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#balance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        잔고 조회 (Balance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 매매 시나리오
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 매매 시나리오">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -605,10 +694,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#market-sell" class="md-nav__link">
+  <a href="#limit-sell" class="md-nav__link">
     <span class="md-ellipsis">
       
-        시장가 매도 (Market Sell)
+        지정가 매도 (Limit Sell)
       
     </span>
   </a>
@@ -621,10 +710,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-error-handling" class="md-nav__link">
+  <a href="#4-error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 에러 처리 (Error Handling)
+        4. 에러 처리 (Error Handling)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-systockexceptions-import-apierror-networkerror-configerror-try-brokerpriceinvalid_code-except-apierror-as-e-printfapi-e-ecode-msg_cd-except-networkerror-print-except-configerror-api-key-print" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        from systock.exceptions import ApiError, NetworkError, ConfigError try: # 존재하지 않는 종목 코드로 조회 시도 broker.price(&quot;INVALID_CODE&quot;) except ApiError as e: # 증권사 서버에서 에러를 반환한 경우 (예: 종목코드 없음, 장 종료 등) print(f&quot;API 오류 발생: {e}&quot;) # e.code로 에러 코드(msg_cd) 접근 가능 except NetworkError: # 인터넷 연결이 끊겼거나 타임아웃 발생 시 print(&quot;인터넷 연결을 확인해주세요.&quot;) except ConfigError: # API Key 누락 등 설정 오류 print(&quot;설정값이 올바르지 않습니다.&quot;)
       
     </span>
   </a>
@@ -652,56 +752,91 @@
 
 
 <h1 id="user-guide">사용 가이드 (User Guide)</h1>
-<p>이 문서는 sy-stock-api의 상세 기능과 다양한 매매 시나리오를 설명합니다.</p>
+<p>이 문서는 <code>sy-stock-api</code>의 상세 기능과 다양한 매매 시나리오를 설명합니다.</p>
+<p>더 전문적인 사용법을 위한 가이드는 아래를 참고하세요.
+* <a href="../professional_usage/">전문적 사용 가이드 (Professional Usage Guide)</a></p>
 <h2 id="1-setup">1. 초기 설정 (Setup)</h2>
-<h3 id="_1">환경 변수 로드</h3>
-<p>보안을 위해 <code>.env</code> 파일을 사용하는 것을 권장하지만, 코드에서 직접 주입할 수도 있습니다.</p>
+<h3 id="_1">브로커 생성</h3>
+<p>보안을 위해 <code>.env</code> 파일을 사용하는 것을 권장하지만, 코드에서 직접 주입할 수도 있습니다.
+(기본적으로 <code>mode</code>를 명시하지 않으면 가상 투자(<code>virtual</code>)로 동작하지 않거나 에러가 날 수 있으므로 명시하는 것이 좋습니다.)</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">systock</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_broker</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># 방법 1: 환경변수(.env) 자동 로드 (권장)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">broker</span> <span class="o">=</span> <span class="n">create_broker</span><span class="p">(</span><span class="s2">&quot;kis&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># 방법 2: 직접 주입 (테스트용)</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">broker</span> <span class="o">=</span> <span class="n">create_broker</span><span class="p">(</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="s2">&quot;kis&quot;</span><span class="p">,</span> 
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">app_key</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> 
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">app_secret</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> 
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">acc_no</span><span class="o">=</span><span class="s2">&quot;12345678-01&quot;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># .env 파일에 APP_KEY, APP_SECRET, ACC_NO 등이 정의되어 있어야 합니다.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">broker</span> <span class="o">=</span> <span class="n">create_broker</span><span class="p">(</span><span class="s2">&quot;kis&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;virtual&quot;</span><span class="p">)</span>  <span class="c1"># 실전은 mode=&quot;real&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># 방법 2: 직접 주입 (테스트 또는 다중 계좌용)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">broker</span> <span class="o">=</span> <span class="n">create_broker</span><span class="p">(</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="s2">&quot;kis&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;virtual&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">app_key</span><span class="o">=</span><span class="s2">&quot;YOUR_APP_KEY&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">app_secret</span><span class="o">=</span><span class="s2">&quot;YOUR_APP_SECRET&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">acc_no</span><span class="o">=</span><span class="s2">&quot;12345678-01&quot;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">)</span>
 </code></pre></div>
-<h2 id="2">2. 매매 시나리오</h2>
+<h2 id="2">2. 시세 및 잔고 조회</h2>
+<h3 id="current-price">현재가 조회 (Current Price)</h3>
+<p>종목 코드를 입력하여 현재가, 거래량, 등락률 등을 조회합니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">quote</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="s2">&quot;005930&quot;</span><span class="p">)</span>  <span class="c1"># 삼성전자</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;현재가: </span><span class="si">{</span><span class="n">quote</span><span class="o">.</span><span class="n">price</span><span class="si">}</span><span class="s2">원&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;등락률: </span><span class="si">{</span><span class="n">quote</span><span class="o">.</span><span class="n">change</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="balance">잔고 조회 (Balance)</h3>
+<p>현재 계좌의 예수금과 보유 종목 현황을 조회합니다.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">balance</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">balance</span><span class="p">()</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;총 평가 자산: </span><span class="si">{</span><span class="n">balance</span><span class="o">.</span><span class="n">total_asset</span><span class="si">}</span><span class="s2">원&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;주문 가능 금액: </span><span class="si">{</span><span class="n">balance</span><span class="o">.</span><span class="n">deposit</span><span class="si">}</span><span class="s2">원&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">for</span> <span class="n">stock</span> <span class="ow">in</span> <span class="n">balance</span><span class="o">.</span><span class="n">holdings</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;보유: </span><span class="si">{</span><span class="n">stock</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">stock</span><span class="o">.</span><span class="n">qty</span><span class="si">}</span><span class="s2">주 (수익률 </span><span class="si">{</span><span class="n">stock</span><span class="o">.</span><span class="n">profit_rate</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="3">3. 매매 시나리오</h2>
 <h3 id="limit-buy">지정가 매수 (Limit Buy)</h3>
 <p>원하는 가격에 도달했을 때 체결되는 주문입니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">systock.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">Side</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">create_order</span><span class="p">(</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;005930&quot;</span><span class="p">,</span>    <span class="c1"># 삼성전자</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>      <span class="c1"># 매수</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">price</span><span class="o">=</span><span class="mi">69000</span><span class="p">,</span>        <span class="c1"># 69,000원</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">qty</span><span class="o">=</span><span class="mi">10</span>              <span class="c1"># 10주</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;주문번호: </span><span class="si">{</span><span class="n">order</span><span class="o">.</span><span class="n">order_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="market-sell">시장가 매도 (Market Sell)</h3>
-<p>현재 가격으로 즉시 매도합니다. (가격 <code>0</code> 입력 시 시장가로 처리되는 로직 가정)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">create_order</span><span class="p">(</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;005930&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">SELL</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">price</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>            <span class="c1"># 시장가</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">qty</span><span class="o">=</span><span class="mi">5</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="3-error-handling">3. 에러 처리 (Error Handling)</h2>
-<p>API 호출 중 발생할 수 있는 예외를 처리하는 방법입니다.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">systock.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApiError</span><span class="p">,</span> <span class="n">NetworkError</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">systock.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">Side</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">broker</span><span class="o">.</span><span class="n">fetch_price</span><span class="p">(</span><span class="s2">&quot;INVALID_CODE&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">except</span> <span class="n">ApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API 오류: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">except</span> <span class="n">NetworkError</span><span class="p">:</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;인터넷 연결을 확인해주세요.&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;005930&quot;</span><span class="p">,</span>    <span class="c1"># 삼성전자</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">BUY</span><span class="p">,</span>      <span class="c1"># 매수</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">price</span><span class="o">=</span><span class="mi">69000</span><span class="p">,</span>        <span class="c1"># 69,000원</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">qty</span><span class="o">=</span><span class="mi">10</span>              <span class="c1"># 10주</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;매수 주문 접수 완료: </span><span class="si">{</span><span class="n">order</span><span class="o">.</span><span class="n">order_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
+<h3 id="limit-sell">지정가 매도 (Limit Sell)</h3>
+<p>보유한 주식을 특정 가격에 매도합니다.
+<em>(현재 버전은 지정가 주문만 지원합니다)</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">order</span> <span class="o">=</span> <span class="n">broker</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;005930&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">side</span><span class="o">=</span><span class="n">Side</span><span class="o">.</span><span class="n">SELL</span><span class="p">,</span>     <span class="c1"># 매도</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">price</span><span class="o">=</span><span class="mi">70000</span><span class="p">,</span>        <span class="c1"># 70,000원</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">qty</span><span class="o">=</span><span class="mi">5</span>               <span class="c1"># 5주</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;매도 주문 접수 완료: </span><span class="si">{</span><span class="n">order</span><span class="o">.</span><span class="n">order_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="4-error-handling">4. 에러 처리 (Error Handling)</h2>
+<p>API 호출 중 발생할 수 있는 예외를 <code>systock.exceptions</code> 모듈을 통해 정교하게 처리할 수 있습니다.</p>
+<h2 id="from-systockexceptions-import-apierror-networkerror-configerror-try-brokerpriceinvalid_code-except-apierror-as-e-printfapi-e-ecode-msg_cd-except-networkerror-print-except-configerror-api-key-print"><div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">systock.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApiError</span><span class="p">,</span> <span class="n">NetworkError</span><span class="p">,</span> <span class="n">ConfigError</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="c1"># 존재하지 않는 종목 코드로 조회 시도</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">broker</span><span class="o">.</span><span class="n">price</span><span class="p">(</span><span class="s2">&quot;INVALID_CODE&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">except</span> <span class="n">ApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="c1"># 증권사 서버에서 에러를 반환한 경우 (예: 종목코드 없음, 장 종료 등)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API 오류 발생: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> 
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="c1"># e.code로 에러 코드(msg_cd) 접근 가능</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">except</span> <span class="n">NetworkError</span><span class="p">:</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="c1"># 인터넷 연결이 끊겼거나 타임아웃 발생 시</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;인터넷 연결을 확인해주세요.&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="k">except</span> <span class="n">ConfigError</span><span class="p">:</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="c1"># API Key 누락 등 설정 오류</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;설정값이 올바르지 않습니다.&quot;</span><span class="p">)</span>
+</code></pre></div></h2>
 
 
 
