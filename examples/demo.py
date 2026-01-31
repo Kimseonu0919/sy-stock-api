@@ -17,7 +17,7 @@ from systock.models import Quote, Order
 
 def main() -> None:
     """메인 실행 함수"""
-    
+
     # 1. 브로커 객체 생성 (팩토리 패턴 사용)
     # .env 파일에서 환경변수를 자동으로 로드합니다.
     print(">>> 브로커 연결 중...")
@@ -38,7 +38,7 @@ def main() -> None:
     # 3. 시세 조회 테스트 (삼성전자: 005930)
     symbol = "005930"
     print(f"\n>>> [{symbol}] 시세 조회 시도...")
-    
+
     try:
         quote: Quote = broker.fetch_price(symbol)
         print(f"종목: {quote.symbol}")
@@ -56,16 +56,15 @@ def main() -> None:
 
     try:
         order: Order = broker.create_order(
-            symbol=symbol,
-            side=Side.BUY,
-            price=price,
-            qty=qty
+            symbol=symbol, side=Side.BUY, price=price, qty=qty
         )
         print(f"주문 접수 완료! 주문번호: {order.order_id}")
-        print(f"주문 내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원")
+        print(
+            f"주문 내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원"
+        )
     except Exception as e:
         print(f"[오류] 주문 실패: {e}")
-    
+
     # 5. 잔고 조회 테스트
     print("\n>>> 내 계좌 잔고 확인...")
     try:
@@ -73,10 +72,12 @@ def main() -> None:
         print(f"예수금: {balance.deposit:,}원")
         print(f"총자산: {balance.total_asset:,}원")
         print(f"보유종목 수: {len(balance.holdings)}개")
-        
+
         for stock in balance.holdings:
-            print(f" - {stock.name}({stock.symbol}): {stock.qty}주 (수익률 {stock.profit_rate}%)")
-            
+            print(
+                f" - {stock.name}({stock.symbol}): {stock.qty}주 (수익률 {stock.profit_rate}%)"
+            )
+
     except Exception as e:
         print(f"[오류] 잔고 조회 실패: {e}")
 
