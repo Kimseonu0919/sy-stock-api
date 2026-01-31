@@ -65,6 +65,20 @@ def main() -> None:
         print(f"주문 내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원")
     except Exception as e:
         print(f"[오류] 주문 실패: {e}")
+    
+    # 5. 잔고 조회 테스트
+    print("\n>>> 내 계좌 잔고 확인...")
+    try:
+        balance = broker.fetch_balance()
+        print(f"예수금: {balance.deposit:,}원")
+        print(f"총자산: {balance.total_asset:,}원")
+        print(f"보유종목 수: {len(balance.holdings)}개")
+        
+        for stock in balance.holdings:
+            print(f" - {stock.name}({stock.symbol}): {stock.qty}주 (수익률 {stock.profit_rate}%)")
+            
+    except Exception as e:
+        print(f"[오류] 잔고 조회 실패: {e}")
 
 
 if __name__ == "__main__":
