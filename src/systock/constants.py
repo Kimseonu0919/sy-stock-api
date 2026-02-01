@@ -6,10 +6,3 @@ class Side(str, Enum):
 
     BUY = "buy"
     SELL = "sell"
-
-
-class Market(str, Enum):
-    """시장 구분"""
-
-    KOSPI = "kospi"
-    KOSDAQ = "kosdaq"

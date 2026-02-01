@@ -1,7 +1,7 @@
 """
-SY-STOCK-API 데모 스크립트
+SY-STOCK-API 데모 스크립트 (Updated)
 이 파일은 패키지 사용 예시를 보여줍니다.
-실행 전 프로젝트 루트에서 'pip install -e .'을 통해 패키지를 설치해야 합니다.
+새로운 체인 방식(Fluent Interface)이 적용되었습니다.
 """
 
 import os
@@ -11,12 +11,13 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 from systock import create_broker
-from systock.constants import Side
-from systock.models import Quote, Order
 
-# [추가] 우리가 만든 커스텀 예외 클래스 임포트
+# Side는 결과 출력용으로만 사용 (주문 함수에서는 내부적으로 처리)
+from systock.constants import Side
+from systock.models import Order
+
+# 커스텀 예외 클래스 임포트
 from systock.exceptions import (
-    SyStockError,
     ConfigError,
     NetworkError,
     ApiError,
@@ -57,11 +58,14 @@ def main() -> None:
     print(f"\n>>> [{symbol}] 시세 조회 시도...")
 
     try:
-        quote: Quote = broker.price(symbol)
-        print(f" - 종목: {quote.symbol}")
-        print(f" - 현재가: {quote.price:,}원")
-        print(f" - 거래량: {quote.volume:,}주")
-        print(f" - 등락률: {quote.change}%")
+        # [변경] 체인 방식 사용: broker.symbol(코드).속성
+        # .price 등에 접근하는 순간 API가 호출됩니다.
+        stock_ctx = broker.symbol(symbol)
+
+        print(f" - 종목코드: {symbol}")
+        print(f" - 현재가: {stock_ctx.price:,}원")
+        print(f" - 거래량: {stock_ctx.volume:,}주")
+        print(f" - 등락률: {stock_ctx.change}%")
 
     except ApiError as e:
         print(f"⚠️ [시세 조회 거부] 증권사 에러 (코드: {e.code}): {e}")
@@ -69,18 +73,20 @@ def main() -> None:
         print(f"📡 [통신 오류] {e}")
 
     # 4. 주문 전송 테스트 (모의투자 매수)
-    # 주의: 장 운영 시간에만 동작할 수 있습니다.
     price = 60000
     qty = 10
     print(f"\n>>> [{symbol}] 매수 주문 시도 ({price:,}원 / {qty}주)...")
 
     try:
-        order: Order = broker.order(symbol=symbol, side=Side.BUY, price=price, qty=qty)
+        # [변경] broker.symbol(코드).buy(...) 사용
+        order: Order = broker.symbol(symbol).buy(price=price, qty=qty)
+
         print(f"✅ 주문 접수 완료! 주문번호: {order.order_id}")
-        print(f"   내용: {order.side} {order.symbol} {order.qty}주 @ {order.price:,}원")
+        print(
+            f"   내용: {order.side.value} {order.symbol} {order.qty}주 @ {order.price:,}원"
+        )
 
     except ApiError as e:
-        # 주문 거부 (장 종료, 잔고 부족 등)는 여기서 잡힙니다.
         print(f"🚫 [주문 거부] {e}")
     except NetworkError as e:
         print(f"📡 [주문 전송 실패] 네트워크 문제로 주문이 나가지 않았습니다: {e}")
@@ -88,12 +94,18 @@ def main() -> None:
     # 5. 잔고 조회 테스트
     print("\n>>> 내 계좌 잔고 확인...")
     try:
-        balance = broker.balance()
-        print(f" - 예수금: {balance.deposit:,}원")
-        print(f" - 총자산: {balance.total_asset:,}원")
-        print(f" - 보유종목 수: {len(balance.holdings)}개")
+        # [변경] broker.my 사용
+        # .deposit 등에 접근하는 순간 잔고 조회 API가 호출됩니다.
+        my_account = broker.my
 
-        for stock in balance.holdings:
+        print(f" - 예수금: {my_account.deposit:,}원")
+        print(f" - 총자산: {my_account.total_asset:,}원")
+
+        # holdings 접근 시 lazy loading
+        holdings = my_account.holdings
+        print(f" - 보유종목 수: {len(holdings)}개")
+
+        for stock in holdings:
             print(
                 f"   * {stock.name}({stock.symbol}): {stock.qty}주 (수익률 {stock.profit_rate}%)"
             )

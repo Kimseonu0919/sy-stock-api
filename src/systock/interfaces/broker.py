@@ -1,17 +1,33 @@
+# src/systock/interfaces/broker.py
+from __future__ import annotations  # [중요] 타입 힌트 지연 평가 (Python 3.7+)
 from abc import ABC, abstractmethod
-from ..models import Quote, Order, Balance
+from typing import TYPE_CHECKING
+
+# 런타임에 필요한 공통 모듈 (순환 참조 위험 없음)
+from ..models import Order, Quote, Balance
 from ..constants import Side
+
+# [TYPE_CHECKING] 런타임에는 실행되지 않고, IDE/TypeChecker에서만 인식
+if TYPE_CHECKING:
+    from ..contexts import AccountContext, StockContext
 
 
 class Broker(ABC):
     """모든 증권사 구현체가 상속받아야 할 기본 클래스"""
 
+    @property
     @abstractmethod
-    def connect(self) -> bool:
+    def my(self) -> AccountContext:
+        """내 계좌 정보 접근 (AccountContext 반환)"""
         pass
 
     @abstractmethod
-    def price(self, symbol: str) -> Quote:
+    def symbol(self, symbol_code: str) -> StockContext:
+        """특정 종목 접근 (StockContext 반환)"""
+        pass
+
+    @abstractmethod
+    def connect(self) -> bool:
         pass
 
     @abstractmethod
@@ -19,14 +35,11 @@ class Broker(ABC):
         """주문 전송 (매수/매도 통합)"""
         pass
 
+    # [내부 구현용 추상 메서드]
     @abstractmethod
-    def balance(self) -> Balance:
-        """계좌 잔고 및 보유 종목 조회"""
+    def _fetch_price(self, symbol: str) -> Quote:
         pass
 
-    # 헬퍼 함수: 내부적으로 self.order 호출
-    def buy(self, symbol: str, price: int, qty: int) -> Order:
-        return self.order(symbol, Side.BUY, price, qty)
-
-    def sell(self, symbol: str, price: int, qty: int) -> Order:
-        return self.order(symbol, Side.SELL, price, qty)
+    @abstractmethod
+    def _fetch_balance(self) -> Balance:
+        pass

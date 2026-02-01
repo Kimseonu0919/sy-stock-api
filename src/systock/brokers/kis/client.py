@@ -4,6 +4,7 @@ from typing import Optional
 # 인터페이스 및 유틸리티
 from ...interfaces.broker import Broker
 from ...utils import RateLimiter
+from ...contexts import StockContext, AccountContext
 
 # 기능별 Mixin
 from .auth import KisAuthMixin
@@ -85,3 +86,15 @@ class KisBroker(
         except requests.exceptions.RequestException as e:
             # requests 에러를 NetworkError로 감싸서 던짐
             raise NetworkError(f"네트워크 요청 실패: {e}") from e
+
+    def symbol(self, symbol_code: str) -> StockContext:
+        """종목 컨텍스트 반환"""
+        return StockContext(self, symbol_code)
+
+    @property
+    def my(self) -> AccountContext:
+        """내 계좌 컨텍스트 반환"""
+        # 매번 새로운 Context를 만들어서 리턴할지, 캐싱할지 결정해야 합니다.
+        # 여기서는 호출 시점마다 상태를 새로 확인하기 위해 매번 생성하되,
+        # AccountContext 내부에서 Lazy Loading을 수행합니다.
+        return AccountContext(self)
