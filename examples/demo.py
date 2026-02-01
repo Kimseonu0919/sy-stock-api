@@ -78,8 +78,12 @@ def main() -> None:
     print(f"\n>>> [{symbol}] 매수 주문 시도 ({price:,}원 / {qty}주)...")
 
     try:
-        # [변경] broker.symbol(코드).buy(...) 사용
-        order: Order = broker.symbol(symbol).buy(price=price, qty=qty)
+        order: Order = broker.order(
+            symbol=symbol, 
+            side=Side.BUY, 
+            price=price, 
+            qty=qty
+        )
 
         print(f"✅ 주문 접수 완료! 주문번호: {order.order_id}")
         print(

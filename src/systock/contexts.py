@@ -39,13 +39,6 @@ class StockContext:
         self._ensure_loaded()
         return self._quote.change
 
-    def buy(self, price: int, qty: int):
-        return self._broker.order(self._symbol, Side.BUY, price, qty)
-
-    def sell(self, price: int, qty: int):
-        return self._broker.order(self._symbol, Side.SELL, price, qty)
-
-
 class AccountContext:
     """
     내 계좌 정보를 다루는 컨텍스트 객체

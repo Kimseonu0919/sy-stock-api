@@ -85,7 +85,12 @@ samsung = broker.symbol("005930")
 print(f"현재가: {samsung.price}원 / 등락률: {samsung.change}%")
 
 # 4. 매수 주문
-order = samsung.buy(price=60000, qty=10)
+order = broker.order(
+    symbol="005930",
+    side=Side.SELL,
+    price=62000,
+    qty=5
+)
 print(f"주문 접수 완료: {order.order_id}")
 
 ```

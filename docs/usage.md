@@ -111,12 +111,18 @@ for stock in my_account.holdings:
 지정가 매수 주문을 전송합니다.
 
 ```python
-# 삼성전자 10주를 60,000원에 매수
-order = broker.symbol("005930").buy(price=60000, qty=10)
+from systock.constants import Side
+
+# 삼성전자 10주를 60,000원에 매수 주문
+order = broker.order(
+    symbol="005930",
+    side=Side.BUY,
+    price=60000,
+    qty=10
+)
 
 print(f"매수 주문 완료: {order.order_id}")
 print(f"주문 내용: {order.symbol} {order.qty}주")
-
 ```
 
 </details>
@@ -130,11 +136,17 @@ print(f"주문 내용: {order.symbol} {order.qty}주")
 보유한 주식을 지정가로 매도합니다.
 
 ```python
-# 삼성전자 5주를 62,000원에 매도
-order = broker.symbol("005930").sell(price=62000, qty=5)
+from systock.constants import Side
+
+# 삼성전자 5주를 62,000원에 매도 주문
+order = broker.order(
+    symbol="005930",
+    side=Side.SELL,
+    price=62000,
+    qty=5
+)
 
 print(f"매도 주문 완료: {order.order_id}")
-
 ```
 
 </details>
