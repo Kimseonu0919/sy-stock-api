@@ -1,5 +1,6 @@
 # src/systock/brokers/kis/domestic.py
 import json
+import time
 from ...models import Quote, Order, Balance, Holding
 from ...constants import Side
 from ...exceptions import ApiError
@@ -84,66 +85,86 @@ class KisDomesticMixin:
         )
 
     def balance(self) -> Balance:
-        """잔고 조회 (주식잔고조회)"""
+        """잔고 조회 (연속 조회 기능 포함)"""
         self.logger.debug("잔고 조회 요청...")
         if not self.access_token:
             self.connect()
 
         url = f"{self.base_url}/uapi/domestic-stock/v1/trading/inquire-balance"
-
-        # TR_ID: 실전(TTTC8434R) / 모의(VTTC8434R)
         tr_id = "TTTC8434R" if self.is_real else "VTTC8434R"
 
-        headers = self._get_headers(tr_id=tr_id)
-
-        params = {
-            "CANO": self.acc_no_prefix,
-            "ACNT_PRDT_CD": self.acc_no_suffix,
-            "AFHR_FLPR_YN": "N",
-            "OFL_YN": "",
-            "INQR_DVSN": "02",
-            "UNPR_DVSN": "01",
-            "FUND_STTL_ICLD_YN": "N",
-            "FNCG_AMT_AUTO_RDPT_YN": "N",
-            "PRCS_DVSN": "00",
-            "CTX_AREA_FK100": "",
-            "CTX_AREA_NK100": "",
-        }
-
-        resp = self.request("GET", url, headers=headers, params=params)
-        resp.raise_for_status()
-        data = resp.json()
-
-        if data["rt_cd"] != "0":
-            raise ApiError(f"잔고 조회 실패: {data['msg1']}")
-
-        # 1. 보유 종목 파싱
+        # 연속 조회를 위한 변수 초기화
         holdings = []
-        for item in data["output1"]:
-            # 보유 수량이 0인 경우 제외 (매도 후 잔여 데이터 등)
-            if int(item["hldg_qty"]) == 0:
-                continue
+        ctx_area_fk100 = ""
+        ctx_area_nk100 = ""
+        tr_cont = None  # 첫 요청은 None
 
-            holdings.append(
-                Holding(
-                    symbol=item["pdno"],
-                    name=item["prdt_name"],
-                    qty=int(item["hldg_qty"]),
-                    avg_price=float(item["pchs_avg_pric"]),
-                    total_price=int(item["evlu_amt"]),
-                    profit=int(item["evlu_pfls_amt"]),
-                    profit_rate=float(item["evlu_pfls_rt"]),
+        while True:
+            headers = self._get_headers(tr_id=tr_id, tr_cont=tr_cont)
+
+            params = {
+                "CANO": self.acc_no_prefix,
+                "ACNT_PRDT_CD": self.acc_no_suffix,
+                "AFHR_FLPR_YN": "N",
+                "OFL_YN": "",
+                "INQR_DVSN": "02",
+                "UNPR_DVSN": "01",
+                "FUND_STTL_ICLD_YN": "N",
+                "FNCG_AMT_AUTO_RDPT_YN": "N",
+                "PRCS_DVSN": "00",
+                "CTX_AREA_FK100": ctx_area_fk100,
+                "CTX_AREA_NK100": ctx_area_nk100,
+            }
+
+            resp = self.request("GET", url, headers=headers, params=params)
+
+            # [예외 처리 강화] 500 에러 등이 발생해도 로그를 남기고 루프 탈출
+            if resp.status_code != 200:
+                self.logger.error(f"잔고 조회 중 오류 발생: {resp.text}")
+                resp.raise_for_status()
+
+            data = resp.json()
+            if data["rt_cd"] != "0":
+                raise ApiError(f"잔고 조회 실패: {data['msg1']}")
+
+            # 1. 종목 파싱 및 추가
+            for item in data["output1"]:
+                if int(item["hldg_qty"]) == 0:
+                    continue
+
+                holdings.append(
+                    Holding(
+                        symbol=item["pdno"],
+                        name=item["prdt_name"],
+                        qty=int(item["hldg_qty"]),
+                        avg_price=float(item["pchs_avg_pric"]),
+                        total_price=int(item["evlu_amt"]),
+                        profit=int(item["evlu_pfls_amt"]),
+                        profit_rate=float(item["evlu_pfls_rt"]),
+                    )
                 )
-            )
 
-        # 2. 계좌 총 자산 파싱 (output2)
+            # 2. 연속 조회 확인 (Response Header의 'tr_cont' 확인)
+            # KIS는 헤더의 tr_cont가 'D' 또는 'N'이면 다음 데이터가 있다는 뜻
+            tr_cont = resp.headers.get("tr_cont", "M")
+
+            if tr_cont in ["N", "D"]:
+                # 다음 페이지 조회를 위한 키 갱신
+                ctx_area_fk100 = data.get("ctx_area_fk100", "")
+                ctx_area_nk100 = data.get("ctx_area_nk100", "")
+                self.logger.debug("잔고 다음 페이지 조회 중...")
+                time.sleep(0.1)  # 너무 빠른 연속 호출 방지
+            else:
+                # 더 이상 데이터 없음
+                break
+
+        # 3. 계좌 총 자산 파싱 (마지막 응답 기준 output2 사용)
         summary = data["output2"][0]
-        self.logger.info(f"잔고 조회 완료. 총자산: {summary['tot_evlu_amt']}원")
 
         return Balance(
-            deposit=int(summary["dnca_tot_amt"]),  # 예수금
-            total_asset=int(summary["tot_evlu_amt"]),  # 총 평가금액
-            profit=int(summary["evlu_pfls_smtl_amt"]),  # 평가손익합계
-            profit_rate=0.0,  # API가 총 수익률은 직접 안 주는 경우가 많아 계산 필요할 수 있음 (여기선 0.0 처리 or 직접 계산)
+            deposit=int(summary["dnca_tot_amt"]),
+            total_asset=int(summary["tot_evlu_amt"]),
+            profit=int(summary["evlu_pfls_smtl_amt"]),
+            profit_rate=0.0,
             holdings=holdings,
         )

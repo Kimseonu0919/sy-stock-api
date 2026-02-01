@@ -6,19 +6,20 @@ from .exceptions import ConfigError
 
 load_dotenv()
 
+
 def create_broker(
-    broker_name: str = "kis", 
-    mode: str = "virtual", 
+    broker_name: str = "kis",
+    mode: str = "virtual",
     account_name: str = None,  # [추가] 계좌 별칭 (예: 'sub', 'mom')
-    token_store: TokenStore = None
+    token_store: TokenStore = None,
 ) -> Broker:
     """
     브로커 인스턴스 생성 팩토리
     :param account_name: .env에 설정된 계좌 별칭 (None이면 기본값 사용)
     """
-    
+
     mode = mode.lower()
-    is_real = (mode == "real")
+    is_real = mode == "real"
 
     if broker_name.lower() == "kis":
         from .brokers.kis.client import KisBroker
@@ -51,13 +52,13 @@ def create_broker(
         # 5. 토큰 저장소 관련 (중요!)
         # 계좌번호가 다르면 TokenStore는 알아서 별도의 키로 저장하므로
         # 같은 store 객체를 써도 꼬이지 않습니다.
-        
+
         return KisBroker(
-            app_key=app_key, 
-            app_secret=app_secret, 
-            acc_no=acc_no, 
+            app_key=app_key,
+            app_secret=app_secret,
+            acc_no=acc_no,
             is_real=is_real,
-            token_store=token_store
+            token_store=token_store,
         )
 
     raise ValueError(f"지원하지 않는 증권사입니다: {broker_name}")

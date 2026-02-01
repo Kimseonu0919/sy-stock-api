@@ -22,27 +22,29 @@ class KisAuthMixin:
     _token_limiter = RateLimiter(max_calls=1, period=1.0)
 
     def __init__(
-        self, 
-        app_key: str, 
-        app_secret: str, 
-        acc_no: str, 
-        is_real: bool = False, 
-        token_store: TokenStore = None
+        self,
+        app_key: str,
+        app_secret: str,
+        acc_no: str,
+        is_real: bool = False,
+        token_store: TokenStore = None,
     ):
         self.app_key = app_key
         self.app_secret = app_secret
-        
-        # [수정] 사용자가 "12345678-01"로 넣든 "1234567801"로 넣든 
+
+        # [수정] 사용자가 "12345678-01"로 넣든 "1234567801"로 넣든
         # 하이픈(-)과 공백을 모두 제거하여 숫자 10자리만 남김
         clean_acc = acc_no.replace("-", "").strip()
-        
+
         if len(clean_acc) != 10:
-             # 혹시라도 자릿수가 안 맞으면 경고 (로그나 print로 확인 추천)
-             print(f"⚠️ [경고] 계좌번호 포맷이 이상합니다 ({len(clean_acc)}자리). KIS는 보통 10자리(8+2)입니다.")
+            # 혹시라도 자릿수가 안 맞으면 경고 (로그나 print로 확인 추천)
+            print(
+                f"⚠️ [경고] 계좌번호 포맷이 이상합니다 ({len(clean_acc)}자리). KIS는 보통 10자리(8+2)입니다."
+            )
 
         self.acc_no_prefix = clean_acc[:8]  # 앞 8자리 (종합계좌번호)
         self.acc_no_suffix = clean_acc[8:]  # 뒤 2자리 (계좌상품코드)
-        
+
         self.is_real = is_real
         self.base_url = self.URL_REAL if is_real else self.URL_VIRTUAL
 
@@ -102,8 +104,13 @@ class KisAuthMixin:
         else:
             raise AuthError(f"인증(토큰발급) 실패: {resp.text}")
 
-    def _get_headers(self, tr_id: str, data: dict = None) -> Dict[str, str]:
-        """헤더 생성 (Hash Key 포함)"""
+    def _get_headers(
+        self, tr_id: str, data: dict = None, tr_cont: str = None
+    ) -> Dict[str, str]:
+        """
+        헤더 생성 (tr_cont 추가)
+        :param tr_cont: 연속 거래 여부 ('N': 다음 데이터 있음, 'M' or None: 없음/첫조회)
+        """
         headers = {
             "Content-Type": "application/json; charset=utf-8",
             "authorization": f"Bearer {self.access_token}",
@@ -112,12 +119,24 @@ class KisAuthMixin:
             "tr_id": tr_id,
             "custtype": "P",
         }
+
+        # [추가] 연속 조회 헤더 설정 (KIS 규격)
+        if tr_cont:
+            headers["tr_cont"] = tr_cont
+
         if data:
             headers["hashkey"] = self._generate_hash(data)
+
         return headers
 
     def _generate_hash(self, data: dict) -> str:
         """Hash Key 생성"""
+
+        # [추가] HashKey 발급도 API 호출이므로 RateLimiter 적용
+        # Mixin이므로 self.limiter가 존재할 때만 동작하도록 처리
+        if hasattr(self, "limiter") and self.limiter:
+            self.limiter.wait()
+
         url = f"{self.base_url}/uapi/hashkey"
         headers = {
             "content-type": "application/json; charset=utf-8",
