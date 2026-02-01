@@ -88,9 +88,51 @@ broker = create_broker("kis", token_store=store)
 
 ---
 
-## 3. 유량 제한 (Rate Limiting) 및 스레드 안전성
+## 3. 다중 계좌 관리 (Multi-Account Support)
 
-이 라이브러리는 **Thread-Safe**하게 설계되었습니다.
+여러 개의 실전 계좌(본인, 가족, 서브 계좌 등)나 모의투자 계좌를 하나의 프로젝트에서 동시에 관리할 수 있습니다. `.env` 파일에 **별칭(Alias)**을 지정하고 코드에서 불러오는 방식입니다.
 
-* **API 제한 준수:** 계좌별로 `RateLimiter`가 전역적으로 공유됩니다. `KisBroker` 객체를 여러 개 생성하더라도, 같은 계좌번호를 사용한다면 API 호출 제한(초당 20건 등)을 초과하지 않도록 자동으로 대기(Wait)합니다.
-* **동시성:** `Lock`을 사용하여 멀티 스레드 환경에서 안전하게 요청을 처리합니다.
+### 환경 변수 구성 (.env)
+
+변수명 사이에 `_별칭_`을 넣어 구분합니다. (예: `SUB`, `MOM`)
+
+```ini
+# 1. [메인] 기본 실전 계좌
+KIS_REAL_APP_KEY=main_app_key
+KIS_REAL_APP_SECRET=main_secret
+KIS_REAL_ACC_NO=11111111-01
+
+# 2. [서브] 별칭: SUB
+KIS_REAL_SUB_APP_KEY=sub_app_key
+KIS_REAL_SUB_APP_SECRET=sub_secret
+KIS_REAL_SUB_ACC_NO=22222222-01
+
+# 3. [가족] 별칭: MOM
+KIS_REAL_MOM_APP_KEY=mom_app_key
+KIS_REAL_MOM_APP_SECRET=mom_secret
+KIS_REAL_MOM_ACC_NO=33333333-01
+
+```
+
+### 코드 예시
+
+`create_broker` 호출 시 `account_name` 파라미터에 별칭을 전달합니다.
+
+```python
+# 1. 메인 계좌 연결 (account_name 생략)
+broker_main = create_broker("kis", mode="real")
+
+# 2. 서브 계좌 연결 (KIS_REAL_SUB_... 로드)
+broker_sub = create_broker("kis", mode="real", account_name="sub")
+
+# 3. 가족 계좌 연결 (KIS_REAL_MOM_... 로드)
+broker_mom = create_broker("kis", mode="real", account_name="mom")
+
+print(f"메인 잔고: {broker_main.balance().deposit}")
+print(f"서브 잔고: {broker_sub.balance().deposit}")
+
+```
+
+> **참고:** 토큰 저장소는 계좌번호를 기준으로 데이터를 분리하여 저장하므로, 여러 브로커 인스턴스가 동시에 실행되어도 토큰이 꼬이지 않습니다.
+
+---
