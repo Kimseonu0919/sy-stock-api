@@ -81,16 +81,10 @@ broker = create_broker(broker_name="kis", mode="virtual")
 broker.connect()
 
 # 3. 현재가 조회 (삼성전자)
-quote = broker.price("005930")
-print(f"현재가: {quote.price}원 / 등락률: {quote.change}%")
+print(f"현재가: {broker.symbol("005930").price}원 / 등락률: {broker.symbol("005930").change}%")
 
 # 4. 매수 주문
-order = broker.order(
-    symbol="005930",
-    side=Side.BUY,
-    price=60000,
-    qty=10
-)
+order = broker.symbol("005930").buy(price=60000, qty=10)
 print(f"주문 접수 완료: {order.order_id}")
 
 ```
