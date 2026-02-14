@@ -31,8 +31,11 @@ class Broker(ABC):
         pass
 
     @abstractmethod
-    def order(self, symbol: str, side: Side, price: int, qty: int) -> Order:
-        """주문 전송 (매수/매도 통합)"""
+    def order(self, symbol: str, side: Side, qty: int, price: int = 0, order_type: str = "지정가") -> Order:
+        """
+        주문 전송
+        :param order_type: '지정가', '시장가', '최유리지정가' 등 (constants.ORDER_TYPE_MAP 참고)
+        """
         pass
 
     # [내부 구현용 추상 메서드]

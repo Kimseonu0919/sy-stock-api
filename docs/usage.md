@@ -105,23 +105,38 @@ for stock in my_account.holdings:
 <details>
 <summary><strong>🛒 매수 주문 (Buy)</strong></summary>
 
-
-
-
-지정가 매수 주문을 전송합니다.
+지정가, 시장가 등 다양한 유형으로 매수 주문을 전송합니다.
 
 ```python
 from systock.constants import Side
 
-# 삼성전자 10주를 60,000원에 매수 주문
-order = broker.order(
+# 1. 지정가 매수 (기본값)
+# order_type을 생략하면 자동으로 "지정가"로 처리됩니다.
+order_limit = broker.order(
     symbol="005930",
     side=Side.BUY,
     price=60000,
     qty=10
 )
 
-print(f"매수 주문 완료: {order.order_id}")
+# 2. 시장가 매수
+# 가격(price)은 0으로 설정하거나 생략하고, order_type을 "시장가"로 지정합니다.
+order_market = broker.order(
+    symbol="005930",
+    side=Side.BUY,
+    qty=5,
+    order_type="시장가"
+)
+
+# 3. 최유리 지정가 매수
+order_best = broker.order(
+    symbol="005930",
+    side=Side.BUY,
+    qty=5,
+    order_type="최유리지정가"
+)
+
+print(f"매수 주문 완료: {order_limit.order_id}")
 print(f"주문 내용: {order.symbol} {order.qty}주")
 ```
 
@@ -130,25 +145,21 @@ print(f"주문 내용: {order.symbol} {order.qty}주")
 <details>
 <summary><strong>📉 매도 주문 (Sell)</strong></summary>
 
-
-
-
-보유한 주식을 지정가로 매도합니다.
+보유한 주식을 매도합니다.
 
 ```python
 from systock.constants import Side
 
-# 삼성전자 5주를 62,000원에 매도 주문
+# 시장가로 5주 즉시 매도
 order = broker.order(
     symbol="005930",
     side=Side.SELL,
-    price=62000,
-    qty=5
+    qty=5,
+    order_type="시장가"
 )
 
-print(f"매도 주문 완료: {order.order_id}")
+print(f"매도 주문 완료: {order.order_id} (유형: {order.order_type})")
 ```
-
 </details>
 
 ---

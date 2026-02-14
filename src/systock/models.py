@@ -14,12 +14,12 @@ class Quote:
 @dataclass
 class Order:
     """주문 결과"""
-
     order_id: str
     symbol: str
     side: Side
     qty: int
     price: int
+    order_type: str
 
 
 @dataclass

@@ -84,12 +84,14 @@ broker.connect()
 samsung = broker.symbol("005930")
 print(f"현재가: {samsung.price}원 / 등락률: {samsung.change}%")
 
-# 4. 매수 주문
+# 4. 매수 주문 (지정가 예시)
+# price 파라미터를 생략하거나 order_type="시장가"를 넣으면 시장가 주문이 됩니다.
 order = broker.order(
     symbol="005930",
-    side=Side.SELL,
-    price=62000,
-    qty=5
+    side=Side.BUY,
+    price=60000,
+    qty=5,
+    order_type="지정가"  # (선택) 생략 시 기본값 "지정가"
 )
 print(f"주문 접수 완료: {order.order_id}")
 
