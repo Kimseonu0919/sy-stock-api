@@ -1,9 +1,19 @@
+네, 방금 구현한 **주문 취소(`cancel`)** 기능과 **주문 유형(`order_type`)** 상세 내용을 반영하여 업데이트된 `usage.md` 문서 내용입니다.
+
+**주요 변경 사항:**
+
+1. **매수/매도 주문 (`.order`)**: `order_type` 파라미터(시장가, 최유리 등) 사용법과 지원되는 유형 목록을 명시했습니다.
+2. **주문 취소 (`.cancel`)**: 미체결 주문을 일괄 취소하는 섹션을 **3. 매매 시나리오** 하단에 추가했습니다.
+
+---
+
 # 사용 가이드 (User Guide)
 
 이 문서는 `sy-stock-api`의 직관적인 **체인 방식(Fluent Interface)** 문법과 다양한 매매 시나리오를 설명합니다.
 
 더 전문적인 사용법(Redis, 멀티 계좌 등)은 아래를 참고하세요.
-* [전문적 사용 가이드 (Professional Usage Guide)](professional_usage.md)
+
+* [전문적 사용 가이드 (Professional Usage Guide)](https://www.google.com/search?q=professional_usage.md)
 
 ---
 
@@ -15,6 +25,7 @@
 <summary><strong>🔌 브로커 생성 및 연결 (Click to close)</strong></summary>
 
 ### 기본 연결 (권장)
+
 `.env` 파일에 `APP_KEY`, `APP_SECRET` 등이 정의되어 있어야 합니다.
 
 ```python
@@ -55,9 +66,6 @@ broker.connect()
 <details>
 <summary><strong>📈 시세 조회 (Market Data)</strong></summary>
 
-
-
-
 `broker.symbol("종목코드")`를 통해 특정 종목의 컨텍스트를 얻은 후, `.price`, `.volume` 등의 속성에 접근하면 API가 자동으로 호출됩니다.
 
 ```python
@@ -75,9 +83,6 @@ print(f"등락률: {samsung.change}%")
 
 <details>
 <summary><strong>💰 잔고 및 자산 (My Account)</strong></summary>
-
-
-
 
 `broker.my`를 통해 내 계좌 정보에 접근합니다.
 
@@ -100,12 +105,18 @@ for stock in my_account.holdings:
 
 ## 3. 매매 시나리오 (Trading)
 
-종목 컨텍스트에서 바로 `.buy()` 또는 `.sell()` 메서드를 호출하여 주문을 전송합니다.
+주문 전송, 주문 유형 설정, 그리고 미체결 주문 취소 기능을 지원합니다.
 
 <details>
 <summary><strong>🛒 매수 주문 (Buy)</strong></summary>
 
-지정가, 시장가 등 다양한 유형으로 매수 주문을 전송합니다.
+`order` 메서드의 `order_type` 파라미터를 통해 다양한 주문 유형을 지정할 수 있습니다.
+
+**지원 주문 유형:**
+
+* `지정가` (기본값), `시장가`
+* `최유리지정가`, `최우선지정가`
+* `IOC지정가`, `FOK지정가` 등
 
 ```python
 from systock.constants import Side
@@ -137,7 +148,7 @@ order_best = broker.order(
 )
 
 print(f"매수 주문 완료: {order_limit.order_id}")
-print(f"주문 내용: {order.symbol} {order.qty}주")
+
 ```
 
 </details>
@@ -145,7 +156,7 @@ print(f"주문 내용: {order.symbol} {order.qty}주")
 <details>
 <summary><strong>📉 매도 주문 (Sell)</strong></summary>
 
-보유한 주식을 매도합니다.
+보유한 주식을 매도합니다. 매수와 동일한 옵션을 사용할 수 있습니다.
 
 ```python
 from systock.constants import Side
@@ -158,8 +169,28 @@ order = broker.order(
     order_type="시장가"
 )
 
-print(f"매도 주문 완료: {order.order_id} (유형: {order.order_type})")
+print(f"매도 주문 완료: {order.order_id}")
+
 ```
+
+</details>
+
+<details>
+<summary><strong>🚫 주문 취소 (Cancel)</strong></summary>
+
+`broker.cancel()` 메서드를 사용하여 특정 종목의 **모든 미체결 주문(매수/매도 포함)**을 일괄 취소합니다.
+
+```python
+# 삼성전자(005930)의 미체결 내역을 조회하여 전량 취소
+cancelled_list = broker.cancel("005930")
+
+if cancelled_list:
+    print(f"취소된 주문번호 목록: {cancelled_list}")
+else:
+    print("취소할 미체결 주문이 없습니다.")
+
+```
+
 </details>
 
 ---
@@ -170,9 +201,6 @@ API 호출 중 발생할 수 있는 예외를 `systock.exceptions` 모듈을 통
 
 <details>
 <summary><strong>⚠️ 예외 처리 가이드 (Exceptions)</strong></summary>
-
-
-
 
 ```python
 from systock.exceptions import ApiError, NetworkError, ConfigError

@@ -1,7 +1,7 @@
 # src/systock/interfaces/broker.py
 from __future__ import annotations  # [중요] 타입 힌트 지연 평가 (Python 3.7+)
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List  # [수정] List 추가
 
 # 런타임에 필요한 공통 모듈 (순환 참조 위험 없음)
 from ..models import Order, Quote, Balance
@@ -35,6 +35,16 @@ class Broker(ABC):
         """
         주문 전송
         :param order_type: '지정가', '시장가', '최유리지정가' 등 (constants.ORDER_TYPE_MAP 참고)
+        """
+        pass
+
+    # [추가] 미체결 취소 메서드
+    @abstractmethod
+    def cancel(self, symbol: str) -> List[str]:
+        """
+        특정 종목의 미체결 주문을 모두 취소합니다.
+        :param symbol: 종목코드 (예: "005930")
+        :return: 취소 접수된 주문번호 리스트
         """
         pass
 
